@@ -16,16 +16,23 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
     
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
+    - uses: YosysHQ/setup-oss-cad-suite@v3
       with:
-        python-version: 3.9
+        python-override: true
+#    - name: Set up Python 3.9
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: 3.9
 
     - name: Install dependencies
       run: |
-        pip3 install -r requirements.txt
-        sudo apt install -y --no-install-recommends iverilog
+        #pip3 install -r requirements.txt
+        tabbypip install -r requirements.txt
+        echo "Python done !" && python3 --version && tabbypy3 --version
+
 
     - name: Verify with cocotb & icarus
       run: |
-        pytest register/tb axis_fifo/tb
+        tabbypy3 -m pytest register/tb
+#       # Broken (with cocotb > 2.0 ?)
+#       tabbypy3 -m pytest axis_fifo/tb
